@@ -30,14 +30,14 @@ func testCreateTable(t *testing.T) {
 
 	sc := NewSQLContent(f)
 	err = sc.CreateTable("dummy")
-	require.NoError(t, err)
+	require.Error(t, err)
 
 	err = sc.Flush()
 	require.NoError(t, err)
 	fi, err := sc.SQLFile.Stat()
 
 	require.NoError(t, err)
-	require.Greater(t, fi.Size(), int64(0))
+	require.Equal(t, fi.Size(), int64(0))
 }
 
 func testStorePokemonListing(t *testing.T) {
@@ -49,7 +49,7 @@ func testStorePokemonListing(t *testing.T) {
 	defer temp.Close()
 
 	sc := NewSQLContent(f)
-	err = sc.InsertInto("dummy", pokemon)
+	err = sc.InsertInto("pokemon", pokemon)
 	require.NoError(t, err)
 
 	err = sc.Flush()

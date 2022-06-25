@@ -22,19 +22,15 @@ func NewSQLContent(f *os.File) *SQLContent {
 
 // CreateTable creates a table
 func (sc *SQLContent) CreateTable(name string) error {
-	tableStatement := fmt.Sprintf(
-		"CREATE TABLE %s (\n"+
-			"\tpokedexNo INTEGER,\n"+
-			"\tname VARCHAR,\n"+
-			"\ttype1 VARCHAR,\n"+
-			"\ttype2 VARCHAR,\n"+
-			"\ttotalBaseStats INTEGER,\n"+
-			"\thp INTEGER,\n"+
-			"\tattack INTEGER,\n"+
-			"\tdefense INTEGER,\n"+
-			"\tspAtk INTEGER,\n"+
-			"\tspDef INTEGER,\n"+
-			"\tspeed INTEGER);\n\n", name)
+	var tableStatement string
+	switch name {
+	case "pokemon":
+		tableStatement = pokemonTableStatement()
+	case "moves":
+		tableStatement = movesTableStatement()
+	default:
+		return fmt.Errorf("%s is not a supported table", name)
+	}
 	_, err := sc.SQLFile.Write([]byte(tableStatement))
 	if err != nil {
 		return err
@@ -78,7 +74,7 @@ func (sc *SQLContent) InsertInto(table string, pokemonInfo interface{}, opts ...
 			sc.SQLFile.Write([]byte(
 				"INSERT INTO " + table +
 					" (name, type, category, power, accuracy, effect) " +
-					fmt.Sprintf("VALUES (%s, %s, %s, %s, %s, %s);\n\n",
+					fmt.Sprintf("VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\");\n\n",
 						move.Name, move.Type, move.Category, move.Power, move.Accuracy, move.Effect,
 					)),
 			)
@@ -90,6 +86,7 @@ func (sc *SQLContent) InsertInto(table string, pokemonInfo interface{}, opts ...
 		}
 		for _, move := range eggMoves {
 			sc.SQLFile.Write([]byte(
+				//FIXME: category can be empty for gmax moves
 				"INSERT INTO " + table +
 					" (pokemon, name, type, category, power, accuracy)" +
 					fmt.Sprintf("VALUES (%s, %s, %s, %s, %s, %s);\n\n",
@@ -132,4 +129,29 @@ func (sc *SQLContent) InsertInto(table string, pokemonInfo interface{}, opts ...
 // Flush flushes the content from the buffered stream
 func (sc *SQLContent) Flush() error {
 	return sc.SQLFile.Flush()
+}
+
+func pokemonTableStatement() string {
+	return "CREATE TABLE pokemon (\n" +
+		"\tpokedexNo INTEGER,\n" +
+		"\tname VARCHAR,\n" +
+		"\ttype1 VARCHAR,\n" +
+		"\ttype2 VARCHAR,\n" +
+		"\ttotalBaseStats INTEGER,\n" +
+		"\thp INTEGER,\n" +
+		"\tattack INTEGER,\n" +
+		"\tdefense INTEGER,\n" +
+		"\tspAtk INTEGER,\n" +
+		"\tspDef INTEGER,\n" +
+		"\tspeed INTEGER);\n\n"
+}
+
+func movesTableStatement() string {
+	return "CREATE TABLE moves (\n" +
+		"\tname VARCHAR,\n" +
+		"\ttype VARCHAR,\n" +
+		"\tcategory VARCHAR,\n" +
+		"\tpower VARCHAR,\n" +
+		"\taccuracy INTEGER,\n" +
+		"\teffect VARCHAR);\n\n"
 }

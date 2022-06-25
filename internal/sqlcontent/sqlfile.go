@@ -11,10 +11,6 @@ type SQLFile struct {
 	*bufio.Writer
 }
 
-// Need to learn how to flush buffer content and why
-
-// New topic: buffered i/o
-
 // I/O buffering: The process of temporarily storing data
 // that is passing between a processor and a peripheral.
 // The usual purpose is to smooth out the difference in

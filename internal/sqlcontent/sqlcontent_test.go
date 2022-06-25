@@ -82,12 +82,6 @@ func testStoreMoveListing(t *testing.T) {
 }
 
 func testStoreEggMove(t *testing.T) {
-	// TODO: benchmark test, we have to do multiple fetches of eggmoves for every pokemon
-	// Find out if there's a better way to get a pokemon's eggmoves...
-	// O (P * E)
-	// Could Represent egg move per pokemon as a graph: root vertex is egg move while neighbors are pokemon
-	// How many root vertexs will we have? The number of root vertexes we'll have is O(E), therfore
-	// finding all of the Pokemon with an eggmoves is O(V+E) and therofore O( E * (V + E)) (exploring all neighbors for each disjoint graph...)
 	eggMoves := listing.PokemonEggMoves("bulbasaur")
 	temp, _ := ioutil.TempFile("", "test")
 	f, err := os.OpenFile(temp.Name(), os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)

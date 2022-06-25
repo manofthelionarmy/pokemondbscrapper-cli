@@ -1,31 +1,40 @@
 package sqlcontent
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"reflect"
 
-	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/sqlfiles"
 	"github.com/manofthelionarmy/pokemondbscrapper/pkg/listing"
 )
 
 // SQLContent is responsbile for converting our scrapped data to SQLContnet. Wraps bytes.Buffer
 type SQLContent struct {
-	content *bytes.Buffer // store content in this buffer
-	*sqlfiles.SQLFile
+	*SQLFile
 }
 
 // NewSQLContent initiates our sql content writer
 func NewSQLContent(f *os.File) *SQLContent {
 	return &SQLContent{
-		SQLFile: sqlfiles.NewSQLFILE(f),
+		SQLFile: NewSQLFILE(f),
 	}
 }
 
 // CreateTable creates a table
 func (sc *SQLContent) CreateTable(name string) error {
-	tableStatement := fmt.Sprintf("CREATE TABLE %s\n", name)
+	tableStatement := fmt.Sprintf(
+		"CREATE TABLE %s (\n"+
+			"\tpokedexNo INTEGER,\n"+
+			"\tname VARCHAR,\n"+
+			"\ttype1 VARCHAR,\n"+
+			"\ttype2 VARCHAR,\n"+
+			"\ttotalBaseStats INTEGER,\n"+
+			"\thp INTEGER,\n"+
+			"\tattack INTEGER,\n"+
+			"\tdefense INTEGER,\n"+
+			"\tspAtk INTEGER,\n"+
+			"\tspDef INTEGER,\n"+
+			"\tspeed INTEGER);\n\n", name)
 	_, err := sc.SQLFile.Write([]byte(tableStatement))
 	if err != nil {
 		return err
@@ -48,14 +57,16 @@ func (sc *SQLContent) InsertInto(table string, pokemonInfo interface{}, opts ...
 			var pokemonType1 string
 			var pokemonType2 string
 			pokemonType1 = mon.Type[0]
+			pokemonType2 = pokemonType1
 			if len(mon.Type) == 2 {
 				pokemonType2 = mon.Type[1]
 			}
+			// TODO: handle region variants
 			sc.SQLFile.Write([]byte(
 				"INSERT INTO " + table +
 					" (pokedexNo, name, type1, type2, totalBaseStats, hp, attack, defense, spAtk, spDef, speed) " +
 					fmt.Sprintf(
-						"VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);\n\n",
+						"VALUES (%s, \"%s\", \"%s\", \"%s\", %s, %s, %s, %s, %s, %s);\n\n",
 						mon.PokedexNo, mon.Name, pokemonType1, pokemonType2, mon.TotalBaseStats, mon.HP,
 						mon.Attack, mon.SpAtk, mon.SpDef, mon.Speed,
 					)),

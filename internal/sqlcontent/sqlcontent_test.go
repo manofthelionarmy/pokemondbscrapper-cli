@@ -34,7 +34,7 @@ func testCreateTable(t *testing.T) {
 
 	err = sc.Flush()
 	require.NoError(t, err)
-	fi, err := sc.File.Stat()
+	fi, err := sc.SQLFile.Stat()
 
 	require.NoError(t, err)
 	require.Greater(t, fi.Size(), int64(0))
@@ -56,7 +56,7 @@ func testStorePokemonListing(t *testing.T) {
 	require.NoError(t, err)
 
 	require.NoErrorf(t, err, "%+v", pokemon)
-	fi, err := sc.File.Stat()
+	fi, err := sc.SQLFile.Stat()
 	require.NoError(t, err)
 
 	require.NotZero(t, fi.Size())
@@ -77,7 +77,7 @@ func testStoreMoveListing(t *testing.T) {
 	err = sc.Flush()
 	require.NoError(t, err)
 
-	fi, err := sc.File.Stat()
+	fi, err := sc.SQLFile.Stat()
 	require.NotZero(t, fi.Size())
 }
 
@@ -102,7 +102,7 @@ func testStoreEggMove(t *testing.T) {
 	err = sc.Flush()
 	require.NoError(t, err)
 
-	fi, err := sc.File.Stat()
+	fi, err := sc.SQLFile.Stat()
 	require.NotZero(t, fi.Size())
 }
 
@@ -120,6 +120,6 @@ func testListingMoveset(t *testing.T) {
 
 	err = sc.Flush()
 	require.NoError(t, err)
-	fi, err := sc.File.Stat()
+	fi, err := sc.SQLFile.Stat()
 	require.NotZero(t, fi.Size())
 }

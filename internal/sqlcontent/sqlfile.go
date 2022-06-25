@@ -1,4 +1,4 @@
-package sqlfiles
+package sqlcontent
 
 import (
 	"bufio"

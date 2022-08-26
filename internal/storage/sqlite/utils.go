@@ -177,7 +177,7 @@ func appendNormalType(typeEffectivenessChart []adding.TypeEffectiveNess) []addin
 			DefenseScore: adding.Effective,
 		},
 		{
-			TypeName:     adding.Grass,
+			TypeName:     adding.Normal,
 			AgainstType:  adding.Flying,
 			AttackScore:  adding.Effective,
 			DefenseScore: adding.Effective,
@@ -201,7 +201,7 @@ func appendNormalType(typeEffectivenessChart []adding.TypeEffectiveNess) []addin
 			DefenseScore: adding.Effective,
 		},
 		{
-			TypeName:     adding.Grass,
+			TypeName:     adding.Normal,
 			AgainstType:  adding.Ghost,
 			AttackScore:  adding.NoEffect,
 			DefenseScore: adding.NoEffect,
@@ -229,6 +229,120 @@ func appendNormalType(typeEffectivenessChart []adding.TypeEffectiveNess) []addin
 			AgainstType:  adding.Fairy,
 			AttackScore:  adding.Effective,
 			DefenseScore: adding.Effective,
+		},
+	}...)
+	return typeEffectivenessChart
+}
+
+func appendFireType(typeEffectivenessChart []adding.TypeEffectiveNess) []adding.TypeEffectiveNess {
+	typeEffectivenessChart = append(typeEffectivenessChart, []adding.TypeEffectiveNess{
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Normal,
+			AttackScore:  adding.Effective,
+			DefenseScore: adding.Effective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Fire,
+			AttackScore:  adding.NotVeryEffective,
+			DefenseScore: adding.NotVeryEffective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Water,
+			AttackScore:  adding.NotVeryEffective,
+			DefenseScore: adding.SuperWeak,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Electric,
+			AttackScore:  adding.Effective,
+			DefenseScore: adding.Effective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Grass,
+			AttackScore:  adding.SuperEffective,
+			DefenseScore: adding.NotVeryEffective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Ice,
+			AttackScore:  adding.SuperEffective,
+			DefenseScore: adding.NotVeryEffective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Fighting,
+			AttackScore:  adding.Effective,
+			DefenseScore: adding.Effective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Poison,
+			AttackScore:  adding.Effective,
+			DefenseScore: adding.Effective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Ground,
+			AttackScore:  adding.Effective,
+			DefenseScore: adding.SuperWeak,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Flying,
+			AttackScore:  adding.Effective,
+			DefenseScore: adding.Effective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Psychic,
+			AttackScore:  adding.Effective,
+			DefenseScore: adding.Effective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Bug,
+			AttackScore:  adding.SuperEffective,
+			DefenseScore: adding.NotVeryEffective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Rock,
+			AttackScore:  adding.NotVeryEffective,
+			DefenseScore: adding.SuperWeak,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Ghost,
+			AttackScore:  adding.Effective,
+			DefenseScore: adding.Effective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Dragon,
+			AttackScore:  adding.NotVeryEffective,
+			DefenseScore: adding.Effective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Dark,
+			AttackScore:  adding.Effective,
+			DefenseScore: adding.Effective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Steel,
+			AttackScore:  adding.SuperEffective,
+			DefenseScore: adding.NotVeryEffective,
+		},
+		{
+			TypeName:     adding.Fire,
+			AgainstType:  adding.Fairy,
+			AttackScore:  adding.Effective,
+			DefenseScore: adding.NotVeryEffective,
 		},
 	}...)
 	return typeEffectivenessChart

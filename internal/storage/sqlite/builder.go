@@ -12,6 +12,11 @@ type Builder struct {
 	datasource string
 }
 
+// NewBuilder returns a new sqlite Builder
+func NewBuilder() *Builder {
+	return &Builder{}
+}
+
 // WithDataSource sets the db name
 func (b *Builder) WithDataSource(datasource string) *Builder {
 	b.datasource = datasource
@@ -29,6 +34,11 @@ func (b *Builder) Build() *Sqlite {
 
 	db, err := sql.Open("sqlite3", b.datasource)
 	if err != nil {
+		panic(err)
+	}
+	// Turn on foreign keys feature
+	stmt, _ := db.Prepare("PRAGMA foreign_keys=ON;")
+	if _, err := stmt.Exec(); err != nil {
 		panic(err)
 	}
 	return &Sqlite{db: db}

@@ -7,6 +7,8 @@ import (
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/listing"
 )
 
+var _ listing.Repository = (*WebScraper)(nil)
+
 // WebScraper is our repository implementation
 type WebScraper struct {
 	url string

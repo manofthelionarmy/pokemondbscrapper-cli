@@ -20,6 +20,7 @@ require (
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/kennygrant/sanitize v1.2.4 // indirect
+	github.com/mattn/go-sqlite3 v1.14.15 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/saintfish/chardet v0.0.0-20120816061221-3af4cd4741ca // indirect
 	github.com/spf13/pflag v1.0.5 // indirect

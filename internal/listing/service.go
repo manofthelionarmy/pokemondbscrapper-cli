@@ -3,7 +3,7 @@ package listing
 // Repository is a storage abstraction
 type Repository interface {
 	EggMoves(name string) []EggMove
-	Moveset(name string) []Move
+	Moveset(name string) []Moveset
 	AllMoves() []Move
 	AllPokemon() []Pokemon
 }
@@ -11,7 +11,7 @@ type Repository interface {
 // Service is a service abstraction that interacts with a Repository
 type Service interface {
 	EggMoves(name string) []EggMove
-	Moveset(name string) []Move
+	Moveset(name string) []Moveset
 	AllPokemon() []Pokemon
 	AllMoves() []Move
 }
@@ -31,7 +31,7 @@ func (s *service) EggMoves(name string) []EggMove {
 	return s.r.EggMoves(name)
 }
 
-func (s *service) Moveset(pokemon string) []Move {
+func (s *service) Moveset(pokemon string) []Moveset {
 	return s.r.Moveset(pokemon)
 }
 

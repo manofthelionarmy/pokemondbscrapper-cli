@@ -1,37 +1,56 @@
 package adding
 
+import "github.com/manofthelionarmy/pokemondbscrapper-cli/internal/listing"
+
 // Service is our adding service interface
 type Service interface {
-	EggMoves(pokdexNo int, moves []EggMove)
-	Moveset(pokdexNo int, moves []Moveset)
-	Moves(moves []Move)
-	PokemonType(pokdexNo int, typeName string)
+	EggMoves(pokdexNo int, moves []listing.EggMove)
+	Moveset(pokdexNo int, moves []listing.Moveset)
+	Moves(moves []listing.Move)
+	Pokemon(pokemon []listing.Pokemon)
+	PokemonType(pokdexNo int, typeNames ...string)
+	TypeEffectiveNess()
 }
 
 // Repository is our respository interface
 type Repository interface {
-	EggMoves(pokdexNo int, moves []EggMove)
-	Moveset(pokdexNo int, moves []Moveset)
-	Moves(moves []Move)
-	PokemonType(pokdexNo int, typeName string)
+	EggMoves(pokdexNo int, moves []listing.EggMove)
+	Moveset(pokdexNo int, moves []listing.Moveset)
+	Moves(moves []listing.Move)
+	Pokemon(pokemon []listing.Pokemon)
+	PokemonType(pokdexNo int, typeNames ...string)
+	TypeEffectiveNess()
 }
 
 type service struct {
 	r Repository
 }
 
-func (s *service) EggMoves(pokdexNo int, moves []EggMove) {
+// NewService returns a new adding Service
+func NewService(r Repository) Service {
+	return &service{r}
+}
+
+func (s *service) EggMoves(pokdexNo int, moves []listing.EggMove) {
 	s.r.EggMoves(pokdexNo, moves)
 }
 
-func (s *service) Moveset(pokdexNo int, moves []Moveset) {
+func (s *service) Moveset(pokdexNo int, moves []listing.Moveset) {
 	s.r.Moveset(pokdexNo, moves)
 }
 
-func (s *service) Moves(moves []Move) {
+func (s *service) Moves(moves []listing.Move) {
 	s.r.Moves(moves)
 }
 
-func (s *service) PokemonType(pokdexNo int, typeName string) {
-	s.r.PokemonType(pokdexNo, typeName)
+func (s *service) PokemonType(pokdexNo int, typeNames ...string) {
+	s.r.PokemonType(pokdexNo, typeNames...)
+}
+
+func (s *service) Pokemon(pokemon []listing.Pokemon) {
+	s.r.Pokemon(pokemon)
+}
+
+func (s *service) TypeEffectiveNess() {
+	s.r.TypeEffectiveNess()
 }

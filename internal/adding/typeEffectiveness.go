@@ -15,8 +15,8 @@ const (
 
 // TypeEffectiveNess represents a table entry
 type TypeEffectiveNess struct {
-	ID            int
-	PokemonTypeID int
-	Against       string
-	Score         int
+	TypeName     string
+	AgainstType  string
+	AttackScore  int
+	DefenseScore int
 }

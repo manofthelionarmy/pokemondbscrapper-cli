@@ -11,22 +11,27 @@ type Sqlite struct {
 	db *sql.DB
 }
 
-// AddEggMove adds an eggmove entry
-func (sqlite *Sqlite) AddEggMove(pokedexNo int, moves []adding.EggMove) {
-
+// EggMoves adds the eggmoves for a pokemon
+func (s *Sqlite) EggMoves(pokdexNo int, moves []adding.EggMove) {
+	panic("not implemented") // TODO: Implement
 }
 
-// AddPokemon adds Pokemon entry
-func (sqlite *Sqlite) AddPokemon() {
-
+// Moveset adds the moveset for a pokemon
+func (s *Sqlite) Moveset(pokdexNo int, moves []adding.Moveset) {
+	panic("not implemented") // TODO: Implement
 }
 
-// AddType adds type entry
-func (sqlite *Sqlite) AddType() {
-
+// Moves populates the moves table
+func (s *Sqlite) Moves(moves []adding.Move) {
+	panic("not implemented") // TODO: Implement
 }
 
-// AddTypeEffectivenessEntry adds an entry to the type effectiveness table
-func (sqlite *Sqlite) AddTypeEffectivenessEntry() {
+// PokemonType adds an entry into the pokemon_types table
+func (s *Sqlite) PokemonType(pokdexNo int, typeName string) {
+	panic("not implemented") // TODO: Implement
+}
+
+// TypeEffectiveNess adds a type effectiveness entry
+func (s *Sqlite) TypeEffectiveNess() {
 
 }

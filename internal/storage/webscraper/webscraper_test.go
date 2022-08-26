@@ -12,6 +12,7 @@ func TestWebScraper(t *testing.T) {
 		"test eggmoves": testEggMoves,
 		"all pokemon":   testAllPokemon,
 		"all moves":     testAllMoves,
+		"movest":        testMoveset,
 	} {
 		t.Run(scenario, f)
 	}
@@ -44,4 +45,13 @@ func testAllMoves(t *testing.T) {
 	allMoves := webScraper.AllMoves()
 	require.NotZero(t, len(allMoves))
 	log.Println(allMoves)
+}
+
+func testMoveset(t *testing.T) {
+	url := "https://pokemondb.net"
+	webScraper := NewBuilder().WithURL(url).Build()
+
+	bulbasaurMoveset := webScraper.Moveset("bulbasaur")
+	require.NotZero(t, len(bulbasaurMoveset))
+	log.Println(bulbasaurMoveset)
 }

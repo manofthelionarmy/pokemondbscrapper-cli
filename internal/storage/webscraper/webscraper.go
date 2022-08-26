@@ -47,3 +47,15 @@ func (w *WebScraper) AllMoves() []listing.Move {
 	scraper.Wait()
 	return moves
 }
+
+// Moveset gets all the moves for a particular pokemon
+func (w *WebScraper) Moveset(pokemon string) []listing.Moveset {
+	scraper := colly.NewCollector(
+		colly.MaxDepth(2),
+	)
+	moves := make([]listing.Moveset, 0)
+	scraper.OnHTML(movesetHandler(&moves))
+	scraper.Visit(fmt.Sprintf("%s/pokedex/%s", w.url, pokemon))
+	scraper.Wait()
+	return moves
+}

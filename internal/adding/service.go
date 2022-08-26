@@ -1,13 +1,19 @@
 package adding
 
-type service struct{}
-
 // Service is our adding service interface
 type Service interface {
-	AddEggMoves(...EggMove)
+	AddEggMoves(pokdexNo int, moves []EggMove)
 }
 
 // Repository is our respository interface
 type Repository interface {
-	AddEggMove()
+	AddEggMove(pokdexNo int, moves []EggMove)
+}
+
+type service struct {
+	r Repository
+}
+
+func (s *service) AddEggMoves(pokdexNo int, moves []EggMove) {
+	s.r.AddEggMove(pokdexNo, moves)
 }

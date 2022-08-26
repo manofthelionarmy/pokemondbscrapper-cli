@@ -1,6 +1,10 @@
 package sqlite
 
-import "database/sql"
+import (
+	"database/sql"
+
+	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/adding"
+)
 
 // Sqlite is our repo implementation
 type Sqlite struct {
@@ -8,7 +12,7 @@ type Sqlite struct {
 }
 
 // AddEggMove adds an eggmove entry
-func (sqlite *Sqlite) AddEggMove() {
+func (sqlite *Sqlite) AddEggMove(pokedexNo int, moves []adding.EggMove) {
 
 }
 

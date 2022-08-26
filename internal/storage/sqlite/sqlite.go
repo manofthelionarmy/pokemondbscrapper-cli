@@ -99,6 +99,22 @@ func (s *Sqlite) TypeEffectiveNess() {
 			}
 		}
 	}
+	if !checkTypeEntriesAdded(s.db, adding.Water) {
+		typeEffectivenessChart := make([]adding.TypeEffectiveNess, 0)
+		typeEffectivenessChart = appendWaterType(typeEffectivenessChart)
+
+		for _, entry := range typeEffectivenessChart {
+			stmt, err := s.db.Prepare(`INSERT INTO type_effectiveness (type_name, against_type, attack_score, defense_score)
+			VALUES ($1, $2, $3, $4);
+		`)
+			if err != nil {
+				panic(err)
+			}
+			if _, err := stmt.Exec(entry.TypeName, entry.AgainstType, entry.AttackScore, entry.DefenseScore); err != nil {
+				panic(err)
+			}
+		}
+	}
 }
 
 // Pokemon adds all of the pokemon entries.

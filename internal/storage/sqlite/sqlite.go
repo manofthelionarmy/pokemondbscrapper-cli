@@ -51,70 +51,14 @@ func (s *Sqlite) TypeEffectiveNess() {
 		panic(err)
 	}
 
-	if !checkTypeEntriesAdded(s.db, adding.Grass) {
-		typeEffectivenessChart := make([]adding.TypeEffectiveNess, 0)
-		typeEffectivenessChart = appendGrassType(typeEffectivenessChart)
-
-		for _, entry := range typeEffectivenessChart {
-			stmt, err := s.db.Prepare(`INSERT INTO type_effectiveness (type_name, against_type, attack_score, defense_score)
-			VALUES ($1, $2, $3, $4);
-		`)
-			if err != nil {
-				panic(err)
-			}
-			if _, err := stmt.Exec(entry.TypeName, entry.AgainstType, entry.AttackScore, entry.DefenseScore); err != nil {
-				panic(err)
-			}
-		}
-	}
-	if !checkTypeEntriesAdded(s.db, adding.Normal) {
-		typeEffectivenessChart := make([]adding.TypeEffectiveNess, 0)
-		typeEffectivenessChart = appendNormalType(typeEffectivenessChart)
-
-		for _, entry := range typeEffectivenessChart {
-			stmt, err := s.db.Prepare(`INSERT INTO type_effectiveness (type_name, against_type, attack_score, defense_score)
-			VALUES ($1, $2, $3, $4);
-		`)
-			if err != nil {
-				panic(err)
-			}
-			if _, err := stmt.Exec(entry.TypeName, entry.AgainstType, entry.AttackScore, entry.DefenseScore); err != nil {
-				panic(err)
-			}
-		}
-	}
-	if !checkTypeEntriesAdded(s.db, adding.Fire) {
-		typeEffectivenessChart := make([]adding.TypeEffectiveNess, 0)
-		typeEffectivenessChart = appendFireType(typeEffectivenessChart)
-
-		for _, entry := range typeEffectivenessChart {
-			stmt, err := s.db.Prepare(`INSERT INTO type_effectiveness (type_name, against_type, attack_score, defense_score)
-			VALUES ($1, $2, $3, $4);
-		`)
-			if err != nil {
-				panic(err)
-			}
-			if _, err := stmt.Exec(entry.TypeName, entry.AgainstType, entry.AttackScore, entry.DefenseScore); err != nil {
-				panic(err)
-			}
-		}
-	}
-	if !checkTypeEntriesAdded(s.db, adding.Water) {
-		typeEffectivenessChart := make([]adding.TypeEffectiveNess, 0)
-		typeEffectivenessChart = appendWaterType(typeEffectivenessChart)
-
-		for _, entry := range typeEffectivenessChart {
-			stmt, err := s.db.Prepare(`INSERT INTO type_effectiveness (type_name, against_type, attack_score, defense_score)
-			VALUES ($1, $2, $3, $4);
-		`)
-			if err != nil {
-				panic(err)
-			}
-			if _, err := stmt.Exec(entry.TypeName, entry.AgainstType, entry.AttackScore, entry.DefenseScore); err != nil {
-				panic(err)
-			}
-		}
-	}
+	populateTypeEffectiveness(s.db, adding.Normal)
+	populateTypeEffectiveness(s.db, adding.Fire)
+	populateTypeEffectiveness(s.db, adding.Water)
+	populateTypeEffectiveness(s.db, adding.Electric)
+	populateTypeEffectiveness(s.db, adding.Grass)
+	populateTypeEffectiveness(s.db, adding.Ice)
+	// TODO: handle fighting types
+	// populateTypeEffectiveness(s.db, adding.Fighting)
 }
 
 // Pokemon adds all of the pokemon entries.

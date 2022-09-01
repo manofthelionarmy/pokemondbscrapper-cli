@@ -61,3 +61,15 @@ func (w *WebScraper) Moveset(pokemon string) []listing.Moveset {
 	scraper.Wait()
 	return moves
 }
+
+// TypeEffectiveNess scrapes and lists the type TypeEffectiveNess chart
+func (w *WebScraper) TypeEffectiveNess() []listing.TypeEffectiveNess {
+	scraper := colly.NewCollector(
+		colly.MaxDepth(2),
+	)
+	typeEffectiveness := make([]listing.TypeEffectiveNess, 0)
+	scraper.OnHTML(typeEffectivenessHandler(&typeEffectiveness))
+	scraper.Visit(fmt.Sprintf("%s/%s", w.url, "type"))
+	scraper.Wait()
+	return typeEffectiveness
+}

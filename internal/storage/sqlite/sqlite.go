@@ -17,7 +17,20 @@ type Sqlite struct {
 
 // EggMoves adds the eggmoves for a pokemon
 func (s *Sqlite) EggMoves(pokdexNo int, moves []listing.EggMove) {
-	panic("not implemented") // TODO: Implement
+	stmt, err := s.db.Prepare(`CREATE TABLE IF NOT EXISTS eggmoves(
+		eggmoves_id INTEGER PRIMARY KEY,
+		pokemon_id INTEGER,
+		moves_id INTEGER,
+		FOREIGN KEY(pokemon_id) REFERENCES pokemon(pokemon_id),
+		FOREIGN KEY(moves_id) REFERENCES moves(moves_id),
+	);`)
+	if err != nil {
+		panic(err)
+	}
+	if _, err := stmt.Exec(); err != nil {
+		panic(err)
+	}
+	// I still need to populate this, so I need to get the pokemon_id by using the pokdexNo
 }
 
 // Moveset adds the moveset for a pokemon
@@ -27,7 +40,37 @@ func (s *Sqlite) Moveset(pokdexNo int, moves []listing.Moveset) {
 
 // Moves populates the moves table
 func (s *Sqlite) Moves(moves []listing.Move) {
-	panic("not implemented") // TODO: Implement
+	stmt, err := s.db.Prepare(`CREATE TABLE IF NOT EXISTS moves (
+		moves_id INTEGER PRIMARY KEY,
+		name VARCHAR(255),
+		type VARCHAR(255),
+		power INTEGER,
+		category VARCHAR(255),
+		accuracy INTEGER,
+		power_points INTEGER,
+		effect TEXT
+	);`)
+	if err != nil {
+		panic(err)
+	}
+	if _, err := stmt.Exec(); err != nil {
+		panic(err)
+	}
+
+	for _, move := range moves {
+		insertStmt, err := s.db.Prepare(`INSERT INTO moves (name, type, power, category, accuracy, power_points, effect)
+			VALUES ($1, $2, $3, $4, $5, $6, $7);
+		`)
+		if err != nil {
+			panic(err)
+		}
+		if _, err := insertStmt.Exec(
+			move.Name, move.Type, move.Power,
+			move.Category, move.Accuracy,
+			move.PowerPoints, move.Effect); err != nil {
+			panic(err)
+		}
+	}
 }
 
 // PokemonType adds an entry into the pokemon_types table
@@ -61,17 +104,43 @@ func (s *Sqlite) TypeEffectiveNess(typeEffectiveness []listing.TypeEffectiveNess
 			panic(err)
 		}
 	}
-
-	// populateTypeEffectiveness(s.db, adding.Normal)
-	// populateTypeEffectiveness(s.db, adding.Fire)
-	// populateTypeEffectiveness(s.db, adding.Water)
-	// populateTypeEffectiveness(s.db, adding.Electric)
-	// populateTypeEffectiveness(s.db, adding.Grass)
-	// populateTypeEffectiveness(s.db, adding.Ice)
-	// TODO: handle fighting types
-	// populateTypeEffectiveness(s.db, adding.Fighting)
 }
 
 // Pokemon adds all of the pokemon entries.
 func (s *Sqlite) Pokemon(pokemon []listing.Pokemon) {
+	stmt, err := s.db.Prepare(`CREATE TABLE IF NOT EXISTS pokemon (
+		pokemon_id INTEGER PRIMARY KEY,
+		pokedexNo INTEGER,
+		name VARCHAR(255),
+		hp INTEGER,
+		attack INTEGER,
+		defense INTEGER,
+		spAttack INTEGER,
+		spDefense INTEGER,
+		speed INTEGER
+	);`)
+	if err != nil {
+		panic(err)
+	}
+
+	if _, err := stmt.Exec(); err != nil {
+		panic(err)
+	}
+
+	insertStmt, err := s.db.Prepare(`INSERT INTO pokemon (pokedexNo, name, hp, attack, defense, spAttack, spDefense, speed)
+		VALUES($1, $2, $3, $4, $5, $6, $7, $8);
+	`)
+	if err != nil {
+		panic(err)
+	}
+	for _, p := range pokemon {
+		if _, err := insertStmt.Exec(
+			p.PokedexNo, p.Name,
+			p.Hp, p.Attack,
+			p.Defense, p.SpAttack,
+			p.SpDefense, p.Speed,
+		); err != nil {
+			panic(err)
+		}
+	}
 }

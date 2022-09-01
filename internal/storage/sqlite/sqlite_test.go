@@ -9,7 +9,9 @@ import (
 
 func TestSqlite(t *testing.T) {
 	for scenario, f := range map[string]func(t *testing.T){
-		"adding entries into type effectiveness": testTypeEffectivess,
+		// "adding entries into type effectiveness": testTypeEffectivess,
+		// "adding entries into moves table": testMoves,
+		"adding pokemon entries into pokemon table": testPokemon,
 	} {
 		t.Run(scenario, f)
 	}
@@ -17,7 +19,21 @@ func TestSqlite(t *testing.T) {
 
 func testTypeEffectivess(t *testing.T) {
 	scraper := webscraper.NewBuilder().WithURL("https://pokemondb.net").Build()
-	db := NewBuilder().WithDataSource("pokemon2.db").Build()
+	db := NewBuilder().WithDataSource("pokemon.db").Build()
 	svc := listing.NewService(scraper)
 	db.TypeEffectiveNess(svc.TypeEffectiveNess())
+}
+
+func testMoves(t *testing.T) {
+	scraper := webscraper.NewBuilder().WithURL("https://pokemondb.net").Build()
+	db := NewBuilder().WithDataSource("pokemon.db").Build()
+	svc := listing.NewService(scraper)
+	db.Moves(svc.AllMoves())
+}
+
+func testPokemon(t *testing.T) {
+	scraper := webscraper.NewBuilder().WithURL("https://pokemondb.net").Build()
+	db := NewBuilder().WithDataSource("pokemon.db").Build()
+	svc := listing.NewService(scraper)
+	db.Pokemon(svc.AllPokemon())
 }

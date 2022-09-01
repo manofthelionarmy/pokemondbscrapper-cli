@@ -6,7 +6,9 @@ package cmd
 
 import (
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/adding"
+	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/listing"
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/storage/sqlite"
+	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/storage/webscraper"
 	"github.com/spf13/cobra"
 )
 
@@ -24,8 +26,15 @@ to quickly create a Cobra application.`,
 		db := sqlite.NewBuilder().
 			WithDataSource("pokemon.db").
 			Build()
-		svc := adding.NewService(db)
-		svc.TypeEffectiveNess()
+
+		scraper := webscraper.NewBuilder().
+			WithURL("https://pokemondb.net").
+			Build()
+		listingSvc := listing.NewService(scraper)
+
+		typeEffectivness := listingSvc.TypeEffectiveNess()
+		addingSvc := adding.NewService(db)
+		addingSvc.TypeEffectiveNess(typeEffectivness)
 	},
 }
 

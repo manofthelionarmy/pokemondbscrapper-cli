@@ -1,6 +1,11 @@
 package sqlite
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/listing"
+	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/storage/webscraper"
+)
 
 func TestSqlite(t *testing.T) {
 	for scenario, f := range map[string]func(t *testing.T){
@@ -11,6 +16,8 @@ func TestSqlite(t *testing.T) {
 }
 
 func testTypeEffectivess(t *testing.T) {
-	db := NewBuilder().WithDataSource("pokemon.db").Build()
-	db.TypeEffectiveNess()
+	scraper := webscraper.NewBuilder().WithURL("https://pokemondb.net").Build()
+	db := NewBuilder().WithDataSource("pokemon2.db").Build()
+	svc := listing.NewService(scraper)
+	db.TypeEffectiveNess(svc.TypeEffectiveNess())
 }

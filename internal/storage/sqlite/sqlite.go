@@ -36,7 +36,7 @@ func (s *Sqlite) PokemonType(pokdexNo int, typeNames ...string) {
 }
 
 // TypeEffectiveNess adds all type effectiveness entries and creates table if it doesn't exist
-func (s *Sqlite) TypeEffectiveNess() {
+func (s *Sqlite) TypeEffectiveNess(typeEffectiveness []listing.TypeEffectiveNess) {
 	stmt, err := s.db.Prepare(`CREATE TABLE IF NOT EXISTS type_effectiveness(
 		type_effectiveness_id INTEGER PRIMARY KEY,
 		type_name VARCHAR(255),
@@ -50,13 +50,24 @@ func (s *Sqlite) TypeEffectiveNess() {
 	if _, err := stmt.Exec(); err != nil {
 		panic(err)
 	}
+	for _, entry := range typeEffectiveness {
+		stmt, err := s.db.Prepare(`INSERT INTO type_effectiveness (type_name, against_type, attack_score, defense_score)
+			VALUES ($1, $2, $3, $4);
+		`)
+		if err != nil {
+			panic(err)
+		}
+		if _, err := stmt.Exec(entry.TypeName, entry.AgainstType, entry.AttackScore, entry.DefenseScore); err != nil {
+			panic(err)
+		}
+	}
 
-	populateTypeEffectiveness(s.db, adding.Normal)
-	populateTypeEffectiveness(s.db, adding.Fire)
-	populateTypeEffectiveness(s.db, adding.Water)
-	populateTypeEffectiveness(s.db, adding.Electric)
-	populateTypeEffectiveness(s.db, adding.Grass)
-	populateTypeEffectiveness(s.db, adding.Ice)
+	// populateTypeEffectiveness(s.db, adding.Normal)
+	// populateTypeEffectiveness(s.db, adding.Fire)
+	// populateTypeEffectiveness(s.db, adding.Water)
+	// populateTypeEffectiveness(s.db, adding.Electric)
+	// populateTypeEffectiveness(s.db, adding.Grass)
+	// populateTypeEffectiveness(s.db, adding.Ice)
 	// TODO: handle fighting types
 	// populateTypeEffectiveness(s.db, adding.Fighting)
 }

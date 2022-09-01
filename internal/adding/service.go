@@ -9,7 +9,7 @@ type Service interface {
 	Moves(moves []listing.Move)
 	Pokemon(pokemon []listing.Pokemon)
 	PokemonType(pokdexNo int, typeNames ...string)
-	TypeEffectiveNess()
+	TypeEffectiveNess([]listing.TypeEffectiveNess)
 }
 
 // Repository is our respository interface
@@ -19,7 +19,7 @@ type Repository interface {
 	Moves(moves []listing.Move)
 	Pokemon(pokemon []listing.Pokemon)
 	PokemonType(pokdexNo int, typeNames ...string)
-	TypeEffectiveNess()
+	TypeEffectiveNess([]listing.TypeEffectiveNess)
 }
 
 type service struct {
@@ -51,6 +51,6 @@ func (s *service) Pokemon(pokemon []listing.Pokemon) {
 	s.r.Pokemon(pokemon)
 }
 
-func (s *service) TypeEffectiveNess() {
-	s.r.TypeEffectiveNess()
+func (s *service) TypeEffectiveNess(typeEffectiveness []listing.TypeEffectiveNess) {
+	s.r.TypeEffectiveNess(typeEffectiveness)
 }

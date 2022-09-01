@@ -6,6 +6,7 @@ type Repository interface {
 	Moveset(name string) []Moveset
 	AllMoves() []Move
 	AllPokemon() []Pokemon
+	TypeEffectiveNess() []TypeEffectiveNess
 }
 
 // Service is a service abstraction that interacts with a Repository
@@ -14,6 +15,7 @@ type Service interface {
 	Moveset(name string) []Moveset
 	AllPokemon() []Pokemon
 	AllMoves() []Move
+	TypeEffectiveNess() []TypeEffectiveNess
 }
 
 // internal service
@@ -41,4 +43,8 @@ func (s *service) AllPokemon() []Pokemon {
 
 func (s *service) AllMoves() []Move {
 	return s.r.AllMoves()
+}
+
+func (s *service) TypeEffectiveNess() []TypeEffectiveNess {
+	return s.r.TypeEffectiveNess()
 }

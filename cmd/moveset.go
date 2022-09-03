@@ -5,6 +5,8 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"log"
+
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/adding"
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/listing"
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/storage/sqlite"
@@ -29,8 +31,17 @@ to quickly create a Cobra application.`,
 
 		listingSvc := listing.NewService(webScraper)
 
+		datasource, err := cmd.Flags().GetString("db")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if len(datasource) == 0 {
+			log.Fatal("empty value passed into db")
+		}
+
 		db := sqlite.NewBuilder().
-			WithDataSource("pokemon.db").
+			WithDataSource(datasource).
 			Build()
 
 		// adding service adds entries to the db

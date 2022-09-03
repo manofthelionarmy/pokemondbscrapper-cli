@@ -5,6 +5,8 @@ Copyright © 2022 Armando Ramon Leon Jr <EMAIL ADDRESS>
 package cmd
 
 import (
+	"log"
+
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/adding"
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/listing"
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/storage/sqlite"
@@ -24,8 +26,20 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		scraper := webscraper.NewBuilder().WithURL("https://pokemondb.net").Build()
-		db := sqlite.NewBuilder().WithDataSource("pokemon.db").Build()
 		listingSvc := listing.NewService(scraper)
+
+		datasource, err := cmd.Flags().GetString("db")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if len(datasource) == 0 {
+			log.Fatal("empty value passed into db")
+		}
+
+		db := sqlite.NewBuilder().
+			WithDataSource(datasource).
+			Build()
 
 		addingSvc := adding.NewService(db)
 		pokemon := listingSvc.AllPokemon()

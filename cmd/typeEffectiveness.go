@@ -5,6 +5,8 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"log"
+
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/adding"
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/listing"
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/storage/sqlite"
@@ -23,8 +25,17 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		datasource, err := cmd.Flags().GetString("db")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if len(datasource) == 0 {
+			log.Fatal("empty value passed into db")
+		}
+
 		db := sqlite.NewBuilder().
-			WithDataSource("pokemon.db").
+			WithDataSource(datasource).
 			Build()
 
 		scraper := webscraper.NewBuilder().

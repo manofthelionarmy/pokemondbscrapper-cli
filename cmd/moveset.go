@@ -12,9 +12,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// movesCmd represents the moves command
-var movesCmd = &cobra.Command{
-	Use:   "moves",
+// movesetCmd represents the moveset command
+var movesetCmd = &cobra.Command{
+	Use:   "moveset",
 	Short: "A brief description of your command",
 	Long: `A longer description that spans multiple lines and likely contains examples
 and usage of using your command. For example:
@@ -29,28 +29,32 @@ to quickly create a Cobra application.`,
 
 		listingSvc := listing.NewService(webScraper)
 
-		moves := listingSvc.AllMoves()
-
 		db := sqlite.NewBuilder().
 			WithDataSource("pokemon.db").
 			Build()
 
 		// adding service adds entries to the db
 		addingSvc := adding.NewService(db)
-		addingSvc.Moves(moves)
+
+		pokemon := listingSvc.AllPokemon()
+
+		for _, p := range pokemon {
+			moves := listingSvc.Moveset(p.Name)
+			addingSvc.Moveset(p.PokedexNo, moves)
+		}
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(movesCmd)
+	rootCmd.AddCommand(movesetCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// movesCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// movesetCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// movesCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// movesetCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

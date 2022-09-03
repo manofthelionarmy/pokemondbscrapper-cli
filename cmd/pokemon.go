@@ -5,6 +5,10 @@ Copyright © 2022 Armando Ramon Leon Jr <EMAIL ADDRESS>
 package cmd
 
 import (
+	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/adding"
+	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/listing"
+	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/storage/sqlite"
+	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/storage/webscraper"
 	"github.com/spf13/cobra"
 )
 
@@ -19,6 +23,13 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		scraper := webscraper.NewBuilder().WithURL("https://pokemondb.net").Build()
+		db := sqlite.NewBuilder().WithDataSource("pokemon.db").Build()
+		listingSvc := listing.NewService(scraper)
+
+		addingSvc := adding.NewService(db)
+		pokemon := listingSvc.AllPokemon()
+		addingSvc.Pokemon(pokemon)
 	},
 }
 

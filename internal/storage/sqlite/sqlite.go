@@ -2,6 +2,7 @@ package sqlite
 
 import (
 	"database/sql"
+	"strings"
 
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/adding"
 	"github.com/manofthelionarmy/pokemondbscrapper-cli/internal/listing"
@@ -197,8 +198,51 @@ func (s *Sqlite) Moves(moves []listing.Move) {
 }
 
 // PokemonType adds an entry into the pokemon_types table
-func (s *Sqlite) PokemonType(pokdexNo int, typeNames ...string) {
-	panic("not implemented") // TODO: Implement
+func (s *Sqlite) PokemonType(pokemon []listing.Pokemon) {
+	stmt, err := s.db.Prepare(`CREATE TABLE IF NOT EXISTS pokemon_types(
+		pokemon_type_id INTEGER PRIMARY KEY,
+		pokemon_id INTEGER,
+		type_name VARCHAR(255),
+		FOREIGN KEY (pokemon_id) REFERENCES pokemon(pokemon_id),
+		FOREIGN KEY (type_name) REFERENCES type_effectiveness(type_name)
+	);`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	if _, err := stmt.Exec(); err != nil {
+		panic(err)
+	}
+
+	pokemonQueryStmt, err := s.db.Prepare(`select pokemon_id from pokemon;`)
+	if err != nil {
+		panic(err)
+	}
+
+	rows, err := pokemonQueryStmt.Query()
+
+	insertStmt, err := s.db.Prepare(`insert into pokemon_types(pokemon_id, type_name)
+	values ($1, $2);
+	`)
+	if err != nil {
+		panic(err)
+	}
+
+	// Iterate through the pokemon id rows
+	pokemonIDs := make([]int, 0)
+	for rows.Next() {
+		var pokemonID int
+		rows.Scan(&pokemonID)
+		// Iterate through the types of the pokemon
+		pokemonIDs = append(pokemonIDs, pokemonID)
+	}
+
+	for idx, id := range pokemonIDs {
+		for _, t := range pokemon[idx].Types {
+			insertStmt.Exec(id, strings.ToLower(t))
+		}
+	}
 }
 
 // TypeEffectiveNess adds all type effectiveness entries and creates table if it doesn't exist

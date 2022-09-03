@@ -8,7 +8,7 @@ type Service interface {
 	Moveset(pokdexNo int, moves []listing.Moveset)
 	Moves(moves []listing.Move)
 	Pokemon(pokemon []listing.Pokemon)
-	PokemonType(pokdexNo int, typeNames ...string)
+	PokemonType([]listing.Pokemon)
 	TypeEffectiveNess([]listing.TypeEffectiveNess)
 }
 
@@ -18,7 +18,7 @@ type Repository interface {
 	Moveset(pokdexNo int, moves []listing.Moveset)
 	Moves(moves []listing.Move)
 	Pokemon(pokemon []listing.Pokemon)
-	PokemonType(pokdexNo int, typeNames ...string)
+	PokemonType([]listing.Pokemon)
 	TypeEffectiveNess([]listing.TypeEffectiveNess)
 }
 
@@ -43,8 +43,8 @@ func (s *service) Moves(moves []listing.Move) {
 	s.r.Moves(moves)
 }
 
-func (s *service) PokemonType(pokdexNo int, typeNames ...string) {
-	s.r.PokemonType(pokdexNo, typeNames...)
+func (s *service) PokemonType(pokemon []listing.Pokemon) {
+	s.r.PokemonType(pokemon)
 }
 
 func (s *service) Pokemon(pokemon []listing.Pokemon) {

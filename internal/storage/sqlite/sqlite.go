@@ -203,8 +203,7 @@ func (s *Sqlite) PokemonType(pokemon []listing.Pokemon) {
 		pokemon_type_id INTEGER PRIMARY KEY,
 		pokemon_id INTEGER,
 		type_name VARCHAR(255),
-		FOREIGN KEY (pokemon_id) REFERENCES pokemon(pokemon_id),
-		FOREIGN KEY (type_name) REFERENCES type_effectiveness(type_name)
+		FOREIGN KEY (pokemon_id) REFERENCES pokemon(pokemon_id)
 	);`)
 
 	if err != nil {
@@ -240,7 +239,9 @@ func (s *Sqlite) PokemonType(pokemon []listing.Pokemon) {
 
 	for idx, id := range pokemonIDs {
 		for _, t := range pokemon[idx].Types {
-			insertStmt.Exec(id, strings.ToLower(t))
+			if _, err := insertStmt.Exec(id, strings.ToLower(t)); err != nil {
+				panic(err)
+			}
 		}
 	}
 }

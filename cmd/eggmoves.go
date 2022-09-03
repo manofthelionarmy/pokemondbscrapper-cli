@@ -25,14 +25,17 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		webScraper := webscraper.NewBuilder().WithURL("").Build()
 		listingService := listing.NewService(webScraper)
-		eggMoves := listingService.EggMoves("bulbasuar")
 
 		db := sqlite.NewBuilder().
 			WithDataSource("").
 			Build()
 
 		addingService := adding.NewService(db)
-		addingService.EggMoves(0, eggMoves)
+		pokemon := listingService.AllPokemon()
+		for _, p := range pokemon {
+			eggMoves := listingService.EggMoves(p.Name)
+			addingService.EggMoves(p.PokedexNo, eggMoves)
+		}
 	},
 }
 

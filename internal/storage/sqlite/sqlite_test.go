@@ -12,7 +12,8 @@ func TestSqlite(t *testing.T) {
 		// "adding entries into type effectiveness": testTypeEffectivess,
 		// "adding entries into moves table": testMoves,
 		// "adding pokemon entries into pokemon table":  testPokemon,
-		"adding eggmove entries into eggmoves table": testEggmoves,
+		// "adding eggmove entries into eggmoves table": testEggmoves,
+		"adding moveset entries into movset table": testMovset,
 	} {
 		t.Run(scenario, f)
 	}
@@ -48,5 +49,18 @@ func testEggmoves(t *testing.T) {
 	for _, p := range pokemon {
 		eggmoves := svc.EggMoves(p.Name)
 		db.EggMoves(p.PokedexNo, eggmoves)
+	}
+}
+
+func testMovset(t *testing.T) {
+
+	scraper := webscraper.NewBuilder().WithURL("https://pokemondb.net").Build()
+	db := NewBuilder().WithDataSource("pokemon.db").Build()
+	svc := listing.NewService(scraper)
+
+	pokemon := svc.AllPokemon()
+	for _, p := range pokemon {
+		moves := svc.Moveset(p.Name)
+		db.Moveset(p.PokedexNo, moves)
 	}
 }

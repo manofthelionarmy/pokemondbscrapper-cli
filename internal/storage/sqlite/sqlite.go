@@ -89,7 +89,76 @@ func (s *Sqlite) EggMoves(pokdexNo int, moves []listing.EggMove) {
 
 // Moveset adds the moveset for a pokemon
 func (s *Sqlite) Moveset(pokdexNo int, moves []listing.Moveset) {
-	panic("not implemented") // TODO: Implement
+	stmt, err := s.db.Prepare(`CREATE TABLE IF NOT EXISTS moveset(
+		moveset_id INTEGER PRIMARY KEY,
+		level INTEGER,
+		pokemon_id INTEGER,
+		moves_id INTEGER,
+		FOREIGN KEY(pokemon_id) REFERENCES pokemon(pokemon_id),
+		FOREIGN KEY(moves_id) REFERENCES moves(moves_id)
+	);`)
+	if err != nil {
+		panic(err)
+	}
+	if _, err := stmt.Exec(); err != nil {
+		panic(err)
+	}
+	// we'll get more than one pokemon for a pokedex no
+	// I still need to populate this, so I need to get the pokemon_id by using the pokdexNo
+	// screw it, we'll enter the same stuff for a pokedexNo for now
+	pokemonQueryStmt, err := s.db.Prepare(`select pokemon_id from pokemon where pokedexNo = $1;`)
+	if err != nil {
+		panic(err)
+	}
+
+	rows, _ := pokemonQueryStmt.Query(pokdexNo)
+	pokemonIDs := make([]int, 0)
+	for rows.Next() {
+		var pokemonID int
+		if err := rows.Scan(&pokemonID); err != nil {
+			panic(err)
+		}
+		pokemonIDs = append(pokemonIDs, pokemonID)
+	}
+
+	movesQueryStmt, err := s.db.Prepare(`select moves_id from moves where name = $1;`)
+	if err != nil {
+		panic(err)
+	}
+
+	movesIDs := make([]int, 0)
+	for _, move := range moves {
+		// get the move id by getting the name of the move
+		rows, err := movesQueryStmt.Query(move.Name)
+		if err != nil {
+			panic(err)
+		}
+		for rows.Next() {
+			var moveID int
+			if err := rows.Scan(&moveID); err != nil {
+				panic(err)
+			}
+			movesIDs = append(movesIDs, moveID)
+		}
+	}
+
+	insertStmt, err := s.db.Prepare(`insert into moveset (
+		level,
+		pokemon_id,
+		moves_id
+	) values ($1, $2, $3);`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	for i, moveID := range movesIDs {
+		for _, pokemonID := range pokemonIDs {
+			if _, err := insertStmt.Exec(moves[i].Level, pokemonID, moveID); err != nil {
+				panic(err)
+			}
+		}
+	}
 }
 
 // Moves populates the moves table

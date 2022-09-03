@@ -23,6 +23,12 @@ func allPokemonHandler(pokemon *[]listing.Pokemon) (string, colly.HTMLCallback) 
 		// what does this index refer to?
 		(*pokemon)[n].Name = cellName.Text()
 
+		// check if it's an other pokemon form
+		pokemonForm := tr.DOM.Find("td.cell-name > small")
+		if len(pokemonForm.Text()) > 0 {
+			(*pokemon)[n].Name = pokemonForm.Text()
+		}
+
 		types := tr.DOM.Find("td > a.type-icon")
 		// This isn't split into one type :(
 		(*pokemon)[n].Types = make([]string, 0)

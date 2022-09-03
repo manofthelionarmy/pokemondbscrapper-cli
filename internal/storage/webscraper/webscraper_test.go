@@ -9,11 +9,11 @@ import (
 
 func TestWebScraper(t *testing.T) {
 	for scenario, f := range map[string]func(*testing.T){
-		"test eggmoves":     testEggMoves,
-		"all pokemon":       testAllPokemon,
-		"all moves":         testAllMoves,
-		"movest":            testMoveset,
-		"typeEffectiveness": typeEffectiveness,
+		// "test eggmoves":     testEggMoves,
+		"all pokemon": testAllPokemon,
+		// "all moves":         testAllMoves,
+		// "movest":            testMoveset,
+		// "typeEffectiveness": typeEffectiveness,
 	} {
 		t.Run(scenario, f)
 	}
